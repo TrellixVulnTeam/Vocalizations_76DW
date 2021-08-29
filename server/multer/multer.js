@@ -24,7 +24,7 @@ const exists = async (fileName) => {
     }
 }
 
-const filefilter = async (req, file, cb) => {
+const filefilter = (req, file, cb) => {
     // only save the file if it doesn't exist; similar process is used in controllers/files.js
     if (exists && (file.mimetype === 'application/json' || file.mimetype === 'audio/mpeg' 
         || file.mimetype === 'audio/wav')) {

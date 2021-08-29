@@ -45,7 +45,11 @@ const Upload = () => {
     formData.append('file', singleFile);
     const response = await singleFileUpload(formData, singleFileOptions);
     console.log(response);
-    setModalIsOpen(true);
+    if (response.status === 201) {
+      setModalIsOpen(true);
+    } else {
+      alert(response.data);
+    }
   }
 
   const processFile = async () => {
