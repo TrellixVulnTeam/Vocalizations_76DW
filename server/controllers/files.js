@@ -1,8 +1,17 @@
 // @https://twitter.com/Musawir01342189/status/1345743937605140497?s=20;
 
 import SingleFile from '../models/singlefile.js';
+import { dbConnection } from "../mongoConnect.js";
 
-//  chose not to implement multiple files but left it here just in case...
+const findFile = async (name) => {
+    try {
+        const collectionArray = await dbConnection.collections.singlefiles.find().toArray();
+        return collectionArray.findIndex( (item) => item.fileName === name );
+    }catch(error) {
+        console.log(error);
+    }
+}
+
 const singleFileUpload = async (req, res, next) => {
     try{
         const file = new SingleFile({
@@ -11,10 +20,15 @@ const singleFileUpload = async (req, res, next) => {
             fileType: req.file.mimetype,
             fileSize: fileSizeFormatter(req.file.size, 2) // 0.00
         });
-        await file.save();
-        res.status(201).send('File Uploaded Successfully');
+        // check to see if file already exists
+        if (await findFile(req.file.originalname) == -1) {
+            const response = await file.save();
+            res.status(201).send(response);
+        } else {
+            res.send("that file already exists");
+        }
     }catch(error) {
-        res.status(400).send(error.message);
+        res.status(400).send(`ERROR ${error.response.data}`);
     }
 }
 
@@ -38,4 +52,13 @@ const fileSizeFormatter = (bytes, decimal) => {
 
 }
 
-export { singleFileUpload, getallSingleFiles };
+const processFile = async (req, res, next) => {
+    try{
+        console.log('processing');
+        res.status(201).send(response);
+    }catch(error) {
+        res.status(400).send(`ERROR ${error.response.data}`);
+    }
+}
+
+export { singleFileUpload, getallSingleFiles, processFile };

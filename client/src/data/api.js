@@ -4,7 +4,8 @@ const apiUrl = 'http://localhost:3000/api/';
 
 export const singleFileUpload = async (data, options) => {
     try {
-        await axios.post(apiUrl + 'singleFile', data, options);
+        const response = await axios.post(apiUrl + 'singleFile', data, options);
+        return response;
     } catch (error) {
         throw error;
     }

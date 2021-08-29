@@ -9,14 +9,14 @@ const databaseConnect = () => {
     mongoose
     .connect(process.env.CONNECTION_URL, {
         useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-        useFindAndModify: true,
+        useUnifiedTopology: true
     })
     .then(() => console.log('Connected to mongodb')
     )
     .catch((error) => console.log(`${error.message}`));
 }
 
-export default databaseConnect;
+const dbConnection = mongoose.connection;
+
+export { databaseConnect, dbConnection};
 
