@@ -4,6 +4,7 @@ import SingleFile from '../models/singlefile.js';
 import { dbConnection } from "../mongoConnect.js";
 
 const findFile = async (name) => {
+    // checks to see if file name exists in mongdb and returns result
     try {
         const collectionArray = await dbConnection.collections.singlefiles.find().toArray();
         return collectionArray.findIndex( (item) => item.fileName === name );
@@ -20,7 +21,7 @@ const singleFileUpload = async (req, res, next) => {
             fileType: req.file.mimetype,
             fileSize: fileSizeFormatter(req.file.size, 2) // 0.00
         });
-        // check to see if file already exists
+        // check to see if file already exists; if it does don't save it again
         if (await findFile(req.file.originalname) == -1) {
             const response = await file.save();
             res.status(201).send(response);
