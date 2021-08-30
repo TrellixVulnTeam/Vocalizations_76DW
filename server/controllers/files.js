@@ -26,7 +26,7 @@ const singleFileUpload = async (req, res, next) => {
             const response = await file.save();
             res.status(201).send(response);
         } else {
-            res.send("that file already exists");
+            res.send("that file already exists in mongo");
         }
     }catch(error) {
         res.status(400).send(`ERROR ${error.response.data}`);

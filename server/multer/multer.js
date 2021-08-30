@@ -6,7 +6,6 @@ import path from "path";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        console.log(`file details ${JSON.stringify(file)}`);
         cb(null, 'uploads');
     },
     filename: (req, file, cb) => {
@@ -15,6 +14,7 @@ const storage = multer.diskStorage({
 });
 
 const exists = async (fileName) => {
+    // checks if the file exists in the directory
     const __dirname = path.resolve();
     try {
         await fs.promises.access(path.join(__dirname, '/uploads/', fileName));
@@ -25,8 +25,8 @@ const exists = async (fileName) => {
 }
 
 const filefilter = (req, file, cb) => {
-    // only save the file if it doesn't exist; similar process is used in controllers/files.js
-    if (exists && (file.mimetype === 'application/json' || file.mimetype === 'audio/mpeg' 
+    // only save the file if it doesn't exist and the format is one of the indicated three; similar process is used in controllers/files.js
+    if (exists(file.originalname) && (file.mimetype === 'application/json' || file.mimetype === 'audio/mpeg' 
         || file.mimetype === 'audio/wav')) {
             cb(null, true);
     }else {

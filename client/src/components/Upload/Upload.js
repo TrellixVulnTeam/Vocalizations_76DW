@@ -103,7 +103,7 @@ const Upload = () => {
           }
         }}
           >
-          <h2>Do you want to process your data now?</h2>
+          <h2>File successfully uploaded to server. Do you want to process your data now?</h2>
           <div>
             <button onClick={() => processFile()}>Yes</button>
             <button onClick={() => setModalIsOpen(false)}>No</button>
