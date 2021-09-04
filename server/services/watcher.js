@@ -1,5 +1,6 @@
 import chokidar from "chokidar";
 import path from "path";
+import fileType from '../uploads/determineExt.js';
 
 const __dirname = path.resolve();
 
@@ -15,18 +16,17 @@ const watchFolder = (targetFolder) => {
       const watcher = chokidar.watch(filePath, {
         persistent: true,
         ignored: /^\./,
-        awaitWriteFinish: true
+        awaitWriteFinish: true,
+        ignoreInitial: true
       });
       
       watcher.on('change', async file => {
         console.log(
-          `[${new Date().toLocaleString()}] ${file} has been changed.`
+            `[${new Date().toLocaleString()}] ${file} has been changed.`
         );
       })
       .on('add', async file => {
-        console.log(
-          `[${new Date().toLocaleString()}] ${file} has been added.`
-        );
+        fileType(file);
       })
       .on('unlink', async file => {
         console.log(

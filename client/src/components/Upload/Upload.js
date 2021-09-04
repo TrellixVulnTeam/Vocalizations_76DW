@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { AppBar, Typography, Button, CircularProgress } from '@material-ui/core';
 import { singleFileUpload, getSingleFiles } from '../../data/api';
-import Modal from 'react-modal';
+// import Modal from 'react-modal';
 
 import useStyles from './styles';
 
-Modal.setAppElement('#root');
+// Modal.setAppElement('#root');
 
 const Upload = () => {
   const classes = useStyles();
   const [singleFile, setSingleFile] = useState('');
   const [singleFiles, setSingleFiles] = useState([]);
   const [singleProgress, setSingleProgress] = useState(0);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  // const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     getSingleFileslist();
@@ -45,17 +45,17 @@ const Upload = () => {
     formData.append('file', singleFile);
     const response = await singleFileUpload(formData, singleFileOptions);
     console.log(response);
-    if (response.status === 201) {
-      setModalIsOpen(true);
-    } else {
-      alert(response.data);
-    }
+    // if (response.status === 201) {
+    //   setModalIsOpen(true);
+    // } else {
+    //   alert(response.data);
+    // }
   }
 
-  const processFile = async () => {
-    console.log('server process file ', singleFile);
-    setModalIsOpen(false);
-  }
+  // const processFile = async () => {
+  //   console.log('server process file ', singleFile);
+  //   setModalIsOpen(false);
+  // }
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
@@ -75,7 +75,7 @@ const Upload = () => {
         >
           Upload
         </Button>
-        <Modal
+        {/* <Modal
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
           style={{
@@ -108,7 +108,7 @@ const Upload = () => {
             <button onClick={() => processFile()}>Yes</button>
             <button onClick={() => setModalIsOpen(false)}>No</button>
           </div>
-        </Modal>
+        </Modal> */}
         <CircularProgress variant="determinate" value={singleProgress} />
     </AppBar>
   );

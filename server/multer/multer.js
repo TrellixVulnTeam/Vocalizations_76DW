@@ -6,7 +6,7 @@ import path from "path";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads');
+        cb(null, './uploads/files');
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);
@@ -17,7 +17,7 @@ const exists = async (fileName) => {
     // checks if the file exists in the directory
     const __dirname = path.resolve();
     try {
-        await fs.promises.access(path.join(__dirname, '/uploads/', fileName));
+        await fs.promises.access(path.join(__dirname, '/uploads/files', fileName));
         return true;
     } catch {
         return false;
