@@ -51,5 +51,5 @@ worker.on("error", error => {
   console.log(error);
 });
 
-// worker.postMessage({num: 45});
+//worker.postMessage({num: 45});
 // worker.postMessage({num: 12});

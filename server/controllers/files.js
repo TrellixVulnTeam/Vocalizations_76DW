@@ -25,6 +25,7 @@ const singleFileUpload = async (req, res, next) => {
         if (await findFile(req.file.originalname) == -1) {
             const response = await file.save();
             res.status(201).send(response);
+            console.log(response._id);
         } else {
             res.send("that file already exists in mongo");
         }

@@ -5,14 +5,17 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "dev": "nodemon -L index.js "
   },
   "keywords": [],
   "author": "Wayne Renaud",
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.8.0",
+    "canvas": "^2.8.0",
     "chokidar": "^3.5.2",
+    "colormap": "^2.3.2",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",

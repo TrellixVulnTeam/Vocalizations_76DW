@@ -1,6 +1,7 @@
 import chokidar from "chokidar";
 import path from "path";
 import fileType from '../uploads/determineExt.js';
+import deleteFile from '../uploads/deleteFile.js';
 
 const __dirname = path.resolve();
 
@@ -29,9 +30,7 @@ const watchFolder = (targetFolder) => {
         fileType(file);
       })
       .on('unlink', async file => {
-        console.log(
-          `[${new Date().toLocaleString()}] ${file} has been deleted.`
-        );
+        deleteFile(file);
       });
 
     } catch (error) {

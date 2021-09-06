@@ -19,16 +19,15 @@ const fileType = (file) => {
             if (err) throw err;
             const JSONdata = JSON.parse(data);
             if (JSONdata.hasOwnProperty("data") === true) {
-                spectrogram();
+                spectrogram(JSONdata);
             } else if (JSONdata.hasOwnProperty("sample_rate")) {
-                audiogram();
+                audiogram(JSONdata);
             } else {
-                annotation();
-                console.log('here');
+                annotation(JSONdata);
             } 
         })
     } else {
-        waveImage();
+        waveImage(file);
     }
 }
 

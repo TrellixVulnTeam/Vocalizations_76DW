@@ -1,5 +1,5 @@
 
-const audiogram = () => {
+const audiogram = (file) => {
     console.log('processing audiogram');
 }
 
