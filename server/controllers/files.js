@@ -14,6 +14,7 @@ const findFile = async (name) => {
 }
 
 const singleFileUpload = async (req, res, next) => {
+    console.log(req.file);
     try{
         const file = new SingleFile({
             fileName: req.file.originalname,

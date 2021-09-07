@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AppBar, Typography, Button, CircularProgress } from '@material-ui/core';
-import { singleFileUpload, getSingleFiles } from '../../data/api';
+import { singleFileUpload, getSingleFiles } from '../../actions/data';
 // import Modal from 'react-modal';
 
 import useStyles from './styles';

@@ -24,16 +24,16 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 app.use(express.json());
 app.use(cors());
 
-// connect postRoutes to app; every route starts with 'posts'
-app.use("/posts", postRoutes);
-// connect file upload to app; every route starts with 'api'
-app.use('/api', fileRoutes);
+// connect to the mongodb
+databaseConnect();
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
 
-// connect to the mongodb
-databaseConnect();
+// connect postRoutes to app; every route starts with 'posts'
+app.use("/posts", postRoutes);
+// connect file upload to app; every route starts with 'api'
+app.use('/api', fileRoutes);
 
 watchFolder('uploads/files');
 

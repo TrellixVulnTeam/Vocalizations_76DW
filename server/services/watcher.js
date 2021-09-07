@@ -21,16 +21,16 @@ const watchFolder = (targetFolder) => {
         ignoreInitial: true
       });
       
-      watcher.on('change', async file => {
+      watcher.on('change', async filePath => {
         console.log(
-            `[${new Date().toLocaleString()}] ${file} has been changed.`
+            `${filePath} has been changed.`
         );
       })
-      .on('add', async file => {
-        fileType(file);
+      .on('add', async filePath => {
+        fileType(filePath);
       })
-      .on('unlink', async file => {
-        deleteFile(file);
+      .on('unlink', async filePath => {
+        deleteFile(filePath);
       });
 
     } catch (error) {
