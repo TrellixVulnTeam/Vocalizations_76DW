@@ -4,7 +4,7 @@ const apiUrl = 'http://localhost:3000/api/';
 
 export const singleFileUpload = async (data, options) => {
     try {
-        const response = await axios.post(apiUrl + 'singleFile', data, options);
+        const response = await axios.post(apiUrl + 'singleFile', data, options); // options = CircularProgress
         return response;
     } catch (error) {
         throw error;

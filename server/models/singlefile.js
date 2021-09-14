@@ -20,7 +20,16 @@ const singleFileSchema = new Schema({
     fileSize: {
         type: String,
         required: true
-    }
+    },
+    label: String,
+    confidence: String,
+    linkages: [String],
+    selectedFile: String,
+    comments: String,
+    startTime: String,
+    endTime: String,
+    minFreq: String,
+    maxFreq: String, 
 }, {timestamps: true});
 
 const singleFile = mongoose.model('SingleFile', singleFileSchema);

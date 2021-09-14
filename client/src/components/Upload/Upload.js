@@ -41,7 +41,7 @@ const Upload = () => {
   }
 
   const uploadSingleFile = async () => {
-    const formData = new FormData();
+    const formData = new FormData(); // uses same format a form would use if the encoding type were set to "multipart/form-data"
     formData.append('file', singleFile);
     const response = await singleFileUpload(formData, singleFileOptions);
     console.log(response);

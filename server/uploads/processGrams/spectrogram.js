@@ -1,8 +1,11 @@
 
 import canvas from 'canvas'; // https://github.com/Automattic/node-canvas
 import fs from 'fs';
+import util from 'util';
 import colormap from 'colormap'; // https://www.npmjs.com/package/colormap
 import path from "path";
+
+import { dbConnection } from "../../mongoConnect.js";
 import { singleFileUpload } from '../../controllers/files.js';
 
 const __dirname = path.resolve();
@@ -98,18 +101,47 @@ const spectrogram = (specData) => {
 
     canvasContext.putImageData(imgData, 0, 0);
 
-    // fs.writeFile ("spec.json", JSON.stringify(mappedData), function(err) {
-    //     if (err) throw err;
-    //     console.log('complete');
-    //     }
-    // );
+    const writeFile = util.promisify(fs.writeFile);
+    
+    const writeFileContent = async (path, data) => {
+        await writeFile(path, data);
+    }
+
+    const fetchLastEntered = async (value) => {
+        // .find() returns a cursor to the documents that match the query criteria.
+        // .sort() Specifies the order in which the query returns matching documents. You must apply sort() to the cursor before retrieving any documents from the database.
+        // .limit() method on a cursor specifies the maximum number of documents the cursor will return.
+        // toAttay() will return an array of one (in this instance)
+        // **** crazy but all of this is necessecary because mongDb is async and it returns a cursor to a document, not the document itself
+        const base64 = "data:image/png;base64," + value;
+        try {
+            const cursor = await dbConnection.collections.postmessages.find().limit(1).sort({$natural:-1}).toArray();
+            dbConnection.collections.postmessages.updateOne(
+                { _id: cursor[0]._id },
+                { $set: { selectedFile: base64 } }
+            );
+            console.log(cursor[0]._id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     specCanvas.toBuffer((err, buffer) => {
         if (err) throw err // encoding failed
-        fs.writeFileSync('./image.png', buffer)
-      }, 'image/png');
+        let path = './image.png';
+        writeFileContent(path, buffer)
+        .then( () => {
+            const buf = new Buffer.from(buffer);
+            const base64 = buf.toString('base64');
+            const recordsArray = fetchLastEntered(base64);
+        })
+        .catch(err => {
+            console.log(`\nError Occurs, 
+            Error code -> ${err.code},
+            Error NO -> ${err.errno}`)
+        });
+    });
 
-      //singleFileUpload;
 }
 
 export default processSpecFile;

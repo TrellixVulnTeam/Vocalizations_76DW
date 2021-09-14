@@ -9,7 +9,8 @@ const databaseConnect = () => {
     mongoose
     .connect(process.env.CONNECTION_URL, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: true
     })
     .then(() => console.log('Connected to mongodb')
     )
