@@ -64,11 +64,11 @@ const processSpecFile = (filePath) => {
     fs.readFile(filePath, (err, data) => {
         if (err) throw err;
         const JSONdata = JSON.parse(data);
-        spectrogram(JSONdata);
+        spectrogram(JSONdata, filePath);
     });
 }
 
-const spectrogram = (specData) => {
+const spectrogram = (specData, filePath) => {
      
     const freqAxisHeight = specData.data[0].length; // number of freq bins; each bin = 1 px
     const timeAxisWidth = specData.data.length; // number of time bins; each bin = 1 
@@ -107,20 +107,15 @@ const spectrogram = (specData) => {
         await writeFile(path, data);
     }
 
-    const fetchLastEntered = async (value) => {
-        // .find() returns a cursor to the documents that match the query criteria.
-        // .sort() Specifies the order in which the query returns matching documents. You must apply sort() to the cursor before retrieving any documents from the database.
-        // .limit() method on a cursor specifies the maximum number of documents the cursor will return.
-        // toAttay() will return an array of one (in this instance)
-        // **** crazy but all of this is necessecary because mongDb is async and it returns a cursor to a document, not the document itself
+    const fetchMongoRecord = async (value) => {
+        // .findOneAndUpdate() returns a cursor to the documents that match the query criteria.
         const base64 = "data:image/png;base64," + value;
+        const relativeFilePath = filePath.replace(__dirname, "").substring(1);
         try {
-            const cursor = await dbConnection.collections.postmessages.find().limit(1).sort({$natural:-1}).toArray();
-            dbConnection.collections.postmessages.updateOne(
-                { _id: cursor[0]._id },
+            const document = await dbConnection.collections.postmessages.findOneAndUpdate( 
+                { "filePath" : relativeFilePath },
                 { $set: { selectedFile: base64 } }
             );
-            console.log(cursor[0]._id);
         } catch (error) {
             console.log(error);
         }
@@ -133,7 +128,7 @@ const spectrogram = (specData) => {
         .then( () => {
             const buf = new Buffer.from(buffer);
             const base64 = buf.toString('base64');
-            const recordsArray = fetchLastEntered(base64);
+            fetchMongoRecord(base64, filePath);
         })
         .catch(err => {
             console.log(`\nError Occurs, 
