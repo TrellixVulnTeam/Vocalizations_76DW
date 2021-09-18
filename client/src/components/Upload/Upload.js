@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AppBar, Typography, Button, CircularProgress } from '@material-ui/core';
-import { singleFileUpload, getSingleFiles } from '../../actions/data';
+import { singleFileUpload } from '../../actions/posts';
+import { useDispatch } from 'react-redux';
+
 // import Modal from 'react-modal';
 
 import useStyles from './styles';
@@ -9,23 +11,11 @@ import useStyles from './styles';
 
 const Upload = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const [singleFile, setSingleFile] = useState('');
-  const [singleFiles, setSingleFiles] = useState([]);
   const [singleProgress, setSingleProgress] = useState(0);
   // const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  useEffect(() => {
-    getSingleFileslist();
-  }, []);
-
-  const getSingleFileslist = async () => {
-    try {
-        const fileslist = await getSingleFiles();
-        setSingleFiles(fileslist);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const SingleFileChange = (e) => {
     setSingleFile(e.target.files[0]);
@@ -40,11 +30,11 @@ const Upload = () => {
     }
   }
 
-  const uploadSingleFile = async () => {
+  const uploadSingleFile = () => {
     const formData = new FormData(); // uses same format a form would use if the encoding type were set to "multipart/form-data"
     formData.append('file', singleFile);
-    const response = await singleFileUpload(formData, singleFileOptions);
-    console.log(response);
+    dispatch(singleFileUpload(formData, singleFileOptions));
+
     // if (response.status === 201) {
     //   setModalIsOpen(true);
     // } else {

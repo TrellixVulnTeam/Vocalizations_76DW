@@ -6,11 +6,16 @@ import colormap from 'colormap'; // https://www.npmjs.com/package/colormap
 import path from "path";
 
 import { dbConnection } from "../../mongoConnect.js";
-import { singleFileUpload } from '../../controllers/files.js';
+
+// import { parentPort } from "worker_threads";
+
+// parentPort.on("message", data => {
+//     console.log('here ', data.filePath);
+//     // use as async; nothing happens until the file is fully read which is fine
+
+// });
 
 const __dirname = path.resolve();
-
-const filePath = path.join(__dirname, 'uploads');
 
 let colorMap = colormap({
     colormap: 'magma',
@@ -61,15 +66,43 @@ const getRGBvalue = (value) => {
 }
 
 const processSpecFile = (filePath) => {
+    // use as async; nothing happens until the file is fully read which is fine
+    /* I/O processes like fs tell the worker pool to use one of its threads to read the contents of a file and notify the event loop when it is done.
+       The event loop then takes the provided callback function and executes it with the content of the file. 
+       This is non-blocking code. Since worker pool has its own threads, the event loop can continue executing normally while the file is being read.
+       Long story short (and I tested this) every upload and processing of a file happens on a seperate thread so there's no blocking and therefore
+       no need to create seperate worker threads **/
     fs.readFile(filePath, (err, data) => {
         if (err) throw err;
         const JSONdata = JSON.parse(data);
+        // execute callback function
         spectrogram(JSONdata, filePath);
     });
 }
 
+const writeFile = util.promisify(fs.writeFile);
+    
+const writeFileContent = async (path, data) => {
+    await writeFile(path, data);
+}
+
+const fetchMongoRecord = async (value, filePath) => {
+    // .findOneAndUpdate() returns a cursor to the documents that match the query criteria.
+    const base64 = "data:image/png;base64," + value;
+    const relativeFilePath = filePath.replace(__dirname, "").substring(1);
+    try {
+        const document = await dbConnection.collections.postmessages.findOneAndUpdate( 
+            { "filePath" : relativeFilePath },
+            { $set: { selectedFile: base64 } }
+        );
+        console.log(relativeFilePath, ' updated to base64');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const spectrogram = (specData, filePath) => {
-     
+    
     const freqAxisHeight = specData.data[0].length; // number of freq bins; each bin = 1 px
     const timeAxisWidth = specData.data.length; // number of time bins; each bin = 1 
 
@@ -101,33 +134,12 @@ const spectrogram = (specData, filePath) => {
 
     canvasContext.putImageData(imgData, 0, 0);
 
-    const writeFile = util.promisify(fs.writeFile);
-    
-    const writeFileContent = async (path, data) => {
-        await writeFile(path, data);
-    }
-
-    const fetchMongoRecord = async (value) => {
-        // .findOneAndUpdate() returns a cursor to the documents that match the query criteria.
-        const base64 = "data:image/png;base64," + value;
-        const relativeFilePath = filePath.replace(__dirname, "").substring(1);
-        try {
-            const document = await dbConnection.collections.postmessages.findOneAndUpdate( 
-                { "filePath" : relativeFilePath },
-                { $set: { selectedFile: base64 } }
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     specCanvas.toBuffer((err, buffer) => {
         if (err) throw err // encoding failed
         let path = './image.png';
         writeFileContent(path, buffer)
         .then( () => {
-            const buf = new Buffer.from(buffer);
-            const base64 = buf.toString('base64');
+            const base64 = buffer.toString('base64');
             fetchMongoRecord(base64, filePath);
         })
         .catch(err => {

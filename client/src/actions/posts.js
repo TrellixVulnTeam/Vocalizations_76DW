@@ -1,4 +1,4 @@
-import { CREATE, UPDATE, DELETE, FETCH_ALL } from '../constants/actionTypes';
+import { CREATE, UPDATE, DELETE, FETCH_ALL, UPLOAD } from '../constants/actionTypes';
 import * as api from "../api";
 
 // Actions and Action Creators
@@ -38,3 +38,12 @@ export const deletePost = (id) => async (dispatch) => {
   }
 }
 
+export const singleFileUpload = (data, options) => async (dispatch) => {
+  console.log('here');
+  try {
+      await api.singleFileUpload(data, options);
+      dispatch({ type: UPLOAD, payload: data, options});
+  } catch (error) {
+      throw error;
+  }
+}

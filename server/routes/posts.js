@@ -1,6 +1,7 @@
 import express from "express";
+import upload from '../multer/multer.js';
 
-import { getPosts, createPost, updatePost, deletePost, likePost } from "../controllers/posts.js";
+import { getPosts, createPost, updatePost, deletePost, singleFileUpload } from "../controllers/posts.js";
 
 const router = express.Router();
 
@@ -9,6 +10,6 @@ router.get("/", getPosts);
 router.post("/", createPost);
 router.patch("/:id", updatePost);
 router.delete("/:id", deletePost);
-router.patch("/:id/likePost", likePost);
+router.post('/singleFile', upload.single('file'), singleFileUpload);
 
 export default router;

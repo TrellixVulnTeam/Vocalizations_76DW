@@ -1,9 +1,9 @@
-import { parentPort } from "worker_threads";
+import { parentPort, workerData } from "worker_threads";
 
-parentPort.on("message", (data) => {
-  console.log(data);
-  parentPort.postMessage({ num: data.num, fib: getFib(data.num) });
-});
+// parentPort.on("message", () => {
+//   console.log(workerData.num);
+parentPort.postMessage(getFib(workerData.num));
+// });
 
 function getFib(num) {
   if (num === 0) {
