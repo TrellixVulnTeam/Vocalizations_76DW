@@ -7,4 +7,4 @@ export const createPost = (newPost) => axios.post(url, newPost);
 export const updatePost = (id, updatedPost) => axios.patch(`${url}/${id}`, updatedPost);
 export const deletePost = (id) => axios.delete(`${url}/${id}`);
 
-export const singleFileUpload = (data, options) => axios.post(url + '/singleFile', data, options); // options = CircularProgress
+export const singleFileUpload = (data, options) => axios.post(`${url}/singleFile`, data, options); // options = CircularProgress

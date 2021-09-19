@@ -17,6 +17,7 @@ export default makeStyles((theme) => ({
   },
   image: {
     marginLeft: '15px',
+    horizontal: 'right',
   },
   toolbar: {
     display: 'flex',
@@ -40,4 +41,8 @@ export default makeStyles((theme) => ({
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
   },
+  iconButton: {
+    display: 'flex',
+    alignItems: 'center',
+  }
 }));

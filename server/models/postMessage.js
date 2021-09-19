@@ -20,6 +20,7 @@ const postSchema = new Schema({
         required: true
     },
     creator: String,
+    title: String,
     label: String,
     tags: [String],
     confidence: String,

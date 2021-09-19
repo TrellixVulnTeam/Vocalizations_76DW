@@ -7,14 +7,6 @@ import path from "path";
 
 import { dbConnection } from "../../mongoConnect.js";
 
-// import { parentPort } from "worker_threads";
-
-// parentPort.on("message", data => {
-//     console.log('here ', data.filePath);
-//     // use as async; nothing happens until the file is fully read which is fine
-
-// });
-
 const __dirname = path.resolve();
 
 let colorMap = colormap({

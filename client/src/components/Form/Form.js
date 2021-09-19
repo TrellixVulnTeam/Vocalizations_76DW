@@ -10,9 +10,16 @@ const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
     creator: "",
     title: "",
-    message: "",
+    label: "",
     tags: "",
-    selectedFile: ""
+    confidence: "",
+    linkages: "",
+    selectedFile: "",
+    comments: "",
+    startTime: "",
+    endTime: "",
+    minFreq: "",
+    maxFreq: "", 
   });
 
   const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
@@ -52,7 +59,7 @@ const Form = ({ currentId, setCurrentId }) => {
         className={classes.form}
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">{ currentId ? 'Editing' : 'Creating' } a Memory</Typography>
+        <Typography variant="h6">{ currentId ? 'Editing' : 'Creating' } Annotation Form</Typography>
         <TextField
           name="creator"
           variant="outlined"
@@ -71,14 +78,42 @@ const Form = ({ currentId, setCurrentId }) => {
           value={postData.title}
           onChange={(e) => setPostData({ ...postData, title: e.target.value })}
         />
-        <TextField
-          name="message"
+         <TextField
+          name="label"
           variant="outlined"
-          label="Message"
+          label="Label"
           fullWidth
-          value={postData.message}
+          value={postData.label}
           onChange={(e) =>
-            setPostData({ ...postData, message: e.target.value })
+            setPostData({ ...postData, label: e.target.value })
+          }
+        />
+         <TextField
+          name="confidence"
+          variant="outlined"
+          label="Confidence Level"
+          fullWidth
+          value={postData.confidence}
+          onChange={(e) =>
+            setPostData({ ...postData, confidence: e.target.value })
+          }
+        />
+        <TextField
+          name="linkages"
+          variant="outlined"
+          label="Linkages"
+          fullWidth
+          value={postData.linkages}
+          onChange={(e) => setPostData({ ...postData, linkages: e.target.value.split(',') })}
+        />
+        <TextField
+          name="comments"
+          variant="outlined"
+          label="Comments"
+          fullWidth
+          value={postData.comments}
+          onChange={(e) =>
+            setPostData({ ...postData, comments: e.target.value })
           }
         />
         <TextField
@@ -98,6 +133,46 @@ const Form = ({ currentId, setCurrentId }) => {
             }
           />
         </div>
+        <TextField
+          name="startTime"
+          variant="outlined"
+          label="StartTime"
+          fullWidth
+          value={postData.startTime}
+          onChange={(e) =>
+            setPostData({ ...postData, startTime: e.target.value })
+          }
+        />
+        <TextField
+          name="endTime"
+          variant="outlined"
+          label="EndTime"
+          fullWidth
+          value={postData.endTime}
+          onChange={(e) =>
+            setPostData({ ...postData, endTime: e.target.value })
+          }
+        />
+        <TextField
+          name="minFreq"
+          variant="outlined"
+          label="MinFreq"
+          fullWidth
+          value={postData.minFreq}
+          onChange={(e) =>
+            setPostData({ ...postData, minFreq: e.target.value })
+          }
+        />
+        <TextField
+          name="maxFreq"
+          variant="outlined"
+          label="MaxFreq"
+          fullWidth
+          value={postData.maxFreq}
+          onChange={(e) =>
+            setPostData({ ...postData, maxFreq: e.target.value })
+          }
+        />
         <Button
           className={classes.buttonSubbmit}
           variant="contained"

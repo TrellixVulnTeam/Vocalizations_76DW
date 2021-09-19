@@ -1,11 +1,12 @@
-import { CREATE, UPDATE, DELETE, FETCH_ALL, UPLOAD } from '../constants/actionTypes';
+import { CREATE, UPDATE, DELETE, FETCH_ALL } from '../constants/actionTypes';
 import * as api from "../api";
 
-// Actions and Action Creators
+// Action Creators are functions that return an action; an action has a type and a payload
+// async (dispatch) uses the thunk middleware
 export const getPosts = () => async (dispatch) => {
   try {
-    const { data } = await api.fetchPosts();
-    dispatch({ type: FETCH_ALL, payload: data });
+    const { data } = await api.fetchPosts(); // response from api goes in "data"
+    dispatch({ type: FETCH_ALL, payload: data }); // dispatch the action so that the current state can be updated
   } catch (error) {
     console.log(error);
   }
@@ -39,10 +40,8 @@ export const deletePost = (id) => async (dispatch) => {
 }
 
 export const singleFileUpload = (data, options) => async (dispatch) => {
-  console.log('here');
   try {
       await api.singleFileUpload(data, options);
-      dispatch({ type: UPLOAD, payload: data, options});
   } catch (error) {
       throw error;
   }

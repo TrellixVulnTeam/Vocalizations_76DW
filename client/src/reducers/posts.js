@@ -1,7 +1,9 @@
 import { CREATE, UPDATE, DELETE, FETCH_ALL } from '../constants/actionTypes';
 
 /* eslint-disable import/no-anonymous-default-export */
-export default (posts = [], action) => {
+
+// these reducers handle the state of all posts
+export default (posts = [], action) => { // posts = state array
   switch (action.type) {
     case FETCH_ALL:
       return action.payload; // the actual posts
